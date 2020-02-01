@@ -9,7 +9,7 @@
             <client_secret: str>,
             [tld: :attr:`SecretsVault.DEFAULT_TLD`],
             [url_template: :attr:`SecretsVault.DEFAULT_URL_TEMPLATE`])
-        secret = VaultSecret.from_json(vault.get_secret(<secret_path: str>))"""
+        secret = VaultSecret(**vault.get_secret(<secret_path: str>))"""
 
 import json
 import requests
@@ -35,7 +35,7 @@ class SecretsVaultAccessError(SecretsVaultError):
 class SecretsVault:
     """A class that uses bearer token authentication to access the DSV API.
 
-    It Uses :attr:`tenant`, :attr:`tld` with :attr:`SERVER_URL_TEMPLATE`,
+    It Uses :attr:`tenant`, :attr:`tld` with :attr:`DEFAULT_URL_TEMPLATE`,
     to create request URLs.
 
     It uses :attr:`client_id` and :attr:`client_secret`
@@ -50,7 +50,10 @@ class SecretsVault:
     def process(response):
         """ Process the response raising an error if the call was unsuccessful
 
+        :param response: the response from the server
+        :type response: :class:`~requests.Response`
         :return: the response if the call was successful
+        :rtype: :class:`~requests.Response`
         :raises: :class:`SecretsVaultAccessError` when the caller does not have
                 access to the secret
         :raises: :class:`SecretsAccessError` when the server responses with any
@@ -85,7 +88,6 @@ class SecretsVault:
         except json.JSONDecodeError:
             raise SecretsVaultError(response)
 
-
     def __init__(
         self,
         tenant,
@@ -95,7 +97,7 @@ class SecretsVault:
         url_template=DEFAULT_URL_TEMPLATE,
     ):
         """
-        :param tenant: The DSV tenant i.e. `tenant`.secretservercloud.`tld`
+        :param tenant: The DSV tenant i.e. `tenant`.secretsvaultcloud.`tld`
         :type tenant: str
         :param client_id: The DSV Client Credential
         :type client_id: str
@@ -144,11 +146,13 @@ class SecretsVault:
             **existing_headers,
         }
 
-    def get_secret(self, secret_path):
-        """Gets a secret
+    def get_secret_json(self, secret_path):
+        """Gets a secret from DSV
 
         :param secret_path: the path to the secret
+        :type secret_path: str
         :return: a JSON formatted string representation of the secret
+        :rtype: str
         :raise: :class:`SecretsVaultAccessError` when the caller does not have
                 permission to access the secret
         :raise: :class:`SecretsVaultError` when the REST API call fails for
@@ -162,3 +166,20 @@ class SecretsVault:
                 headers=self._add_authorization_header(),
             )
         ).text
+
+    def get_secret(self, secret_path):
+        """Gets a secret
+
+        :param secret_path: the path to the secret
+        :type secret_path: str
+        :return: a ``dict`` representation of the secret
+        :rtype: dict
+        :raise: :class:`SecretsVaultAccessError` when the caller does not have
+                permission to access the secret
+        :raise: :class:`SecretsVaultError` when the REST API call fails for
+                any other reason"""
+
+        try:
+            return json.loads(self.get_secret_json(secret_path))
+        except json.JSONDecodeError:
+            raise SecretsVaultError(response)

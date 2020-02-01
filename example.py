@@ -11,7 +11,7 @@ if __name__ == "__main__":
     with open("test_vault.json") as f:
         vault = SecretsVault(**json.load(f))
     try:
-        secret = VaultSecret.from_json(vault.get_secret("/test/secret"))
+        secret = VaultSecret(**vault.get_secret("/test/secret"))
         print(
             f"""username: {secret.data['username']}
 password: {secret.data['password']}"""

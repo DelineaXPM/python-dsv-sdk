@@ -34,10 +34,6 @@ class VaultSecret:
     last_modified_by: str
     version: float
 
-    @classmethod
-    def from_json(cls, s):
-        return cls(**json.loads(s))
-
     def __init__(self, **kwargs):
         # The REST API returns attributes with camelCase names which we replace
         # with snake_case per Python conventions

@@ -37,7 +37,7 @@ a the Secret's attributes. The `data` attribute is a Python Dictionary.
 ```python
 from thycotic.secrets.dataclasses import Secret
 
-secret = VaultSecret.from_json(vault.get_secret("/test/secret"))
+secret = VaultSecret(**vault.get_secret("/test/secret"))
 
 print(f"username: {secret.data['username']}\npassword: {secret.data['password']}")
 ```

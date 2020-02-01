@@ -26,10 +26,7 @@ def test_api_url(vault_json):
 
 
 def test_get_secret(vault_json):
-    assert (
-        len(VaultSecret.from_json(vault(vault_json).get_secret("/test/secret")).id)
-        == 36
-    )
+    assert len(VaultSecret(**vault(vault_json).get_secret("/test/secret")).id) == 36
 
 
 def test_get_nonexistent_secret(vault_json):

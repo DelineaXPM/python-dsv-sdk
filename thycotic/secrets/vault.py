@@ -1,15 +1,10 @@
-""" The Thycotic DevOps Secrets Vault Python SDK API
+""" The Thycotic DevOps Secrets Vault (DSV) SDK API facilitates access to DSV
+using bearer token authentication.
 
-    Provides access to the DevOps Secrets REST API using bearer token authentication.
+Example::
 
-    Typical usage:
-        vault = SecretsVault(
-            <tenant: str>,
-            <client_id: str>,
-            <client_secret: str>,
-            [tld: :attr:`SecretsVault.DEFAULT_TLD`],
-            [url_template: :attr:`SecretsVault.DEFAULT_URL_TEMPLATE`])
-        secret = VaultSecret(**vault.get_secret(<secret_path: str>))"""
+    vault = SecretsVault(tenant, username, password, tld="com")
+    secret = Secret(**vault.get_secret("/path/to/secret"))"""
 
 import json
 import requests
@@ -152,7 +147,7 @@ class SecretsVault:
         :param secret_path: the path to the secret
         :type secret_path: str
         :return: a JSON formatted string representation of the secret
-        :rtype: str
+        :rtype: ``str``
         :raise: :class:`SecretsVaultAccessError` when the caller does not have
                 permission to access the secret
         :raise: :class:`SecretsVaultError` when the REST API call fails for
@@ -173,7 +168,7 @@ class SecretsVault:
         :param secret_path: the path to the secret
         :type secret_path: str
         :return: a ``dict`` representation of the secret
-        :rtype: dict
+        :rtype: ``dict``
         :raise: :class:`SecretsVaultAccessError` when the caller does not have
                 permission to access the secret
         :raise: :class:`SecretsVaultError` when the REST API call fails for

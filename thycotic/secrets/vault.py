@@ -178,8 +178,9 @@ class SecretsVault:
                 permission to access the secret
         :raise: :class:`SecretsVaultError` when the REST API call fails for
                 any other reason"""
+        response = self.get_secret_json(secret_path)
 
         try:
-            return json.loads(self.get_secret_json(secret_path))
+            return json.loads(response)
         except json.JSONDecodeError:
             raise SecretsVaultError(response)

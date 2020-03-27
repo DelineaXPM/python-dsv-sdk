@@ -4,12 +4,63 @@ using bearer token authentication.
 Example::
 
     vault = SecretsVault(tenant, username, password, tld="com")
-    secret = Secret(**vault.get_secret("/path/to/secret"))"""
+    # to get the secret as a ``dict``
+    secret = vault.get_secret("/path/to/secret")
+    # or, to use the dataclass
+    secret = VaultSecret(**vault.get_secret("/path/to/secret"))"""
 
 import json
+import re
 import requests
 
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+
+
+@dataclass
+class VaultSecret:
+    id: str
+    path: str
+    attributes: str
+    description: str
+    data: dict
+    created: datetime
+    last_modified: datetime
+    created_by: str
+    last_modified_by: str
+    version: float
+
+    DATETIME_FORMAT_PARAMETER = "datetime_format"
+    DEFAULT_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
+    # Based on https://gist.github.com/jaytaylor/3660565
+    @staticmethod
+    def snake_case(camel_cased):
+        """ Transform to snake case
+
+        Transforms the keys of the given map from camelCase to snake_case.
+        """
+        return [
+            (
+                re.compile("([a-z0-9])([A-Z])")
+                .sub(r"\1_\2", re.compile(r"(.)([A-Z][a-z]+)").sub(r"\1_\2", k))
+                .lower(),
+                v,
+            )
+            for (k, v) in camel_cased.items()
+        ]
+
+    def __init__(self, **kwargs):
+        # The REST API returns attributes with camelCase names which we replace
+        # with snake_case per Python conventions
+        datetime_format = self.DEFAULT_DATETIME_FORMAT
+        if self.DATETIME_FORMAT_PARAMETER in kwargs:
+            datetime_format = kwargs[self.DATETIME_FORMAT_PARAMETER]
+        for k, v in self.snake_case(kwargs):
+            # @dataclass does not marshal timestamps into datetimes automatically
+            if k in ["created", "last_modified"]:
+                v = datetime.strptime(v, datetime_format)
+            setattr(self, k, v)
 
 
 class SecretsVaultError(Exception):

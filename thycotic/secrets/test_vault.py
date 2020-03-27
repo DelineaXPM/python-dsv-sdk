@@ -1,9 +1,9 @@
 import pytest
-from thycotic.secrets.dataclasses import VaultSecret
 from thycotic.secrets.vault import (
     SecretsVault,
     SecretsVaultAccessError,
     SecretsVaultError,
+    VaultSecret,
 )
 
 

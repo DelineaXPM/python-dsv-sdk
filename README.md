@@ -35,7 +35,7 @@ encoded string. The SDK API also contains a `VaultSecret` `@dataclass` containin
 a the Secret's attributes. The `data` attribute is a Python Dictionary.
 
 ```python
-from thycotic.secrets.dataclasses import Secret
+from thycotic.secrets.vault import VaultSecret
 
 secret = VaultSecret(**vault.get_secret("/test/secret"))
 

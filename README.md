@@ -1,5 +1,9 @@
 # The Thycotic DevOps Secrets Vault Python SDK
 
+![PyPI Version](https://img.shields.io/pypi/v/python-dsv-sdk)
+![License](https://img.shields.io/github/license/thycotic/python-dsv-sdk)
+![Python Versions](https://img.shields.io/pypi/pyversions/python-dsv-sdk)
+
 The [Thycotic](https://thycotic.com/)
 [DevOps Secrets Vault](https://thycotic.com/products/devops-secrets-vault-password-management/)
 (DSV) Python SDK contains classes that interact with the DSV REST API.

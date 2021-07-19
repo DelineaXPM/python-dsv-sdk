@@ -12,18 +12,18 @@ def env_vars():
     return {
         "client_id": os.getenv("DSV_CLIENT_ID"),
         "client_secret": os.getenv("DSV_CLIENT_SECRET"),
-        "tenant": os.getenv("DSV_TENANT"),
+        "base_url": os.getenv("DSV_BASE_URL"),
     }
 
 
 @pytest.fixture
 def authorizer(env_vars):
     return PasswordGrantAuthorizer(
+        env_vars["base_url"],
         env_vars['client_id'],
         env_vars["client_secret"],
-        env_vars["tenant"],
     )
 
 @pytest.fixture()
-def vault(authorizer):
-    return SecretsVault(authorizer)
+def vault(authorizer, env_vars):
+    return SecretsVault(env_vars["base_url"], authorizer)

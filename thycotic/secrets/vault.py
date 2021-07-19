@@ -9,6 +9,7 @@ Example::
     # or, to use the dataclass
     secret = VaultSecret(**vault.get_secret("/path/to/secret"))"""
 
+from abc import ABC, abstractmethod
 import json
 import re
 import requests
@@ -36,7 +37,7 @@ class VaultSecret:
     # Based on https://gist.github.com/jaytaylor/3660565
     @staticmethod
     def snake_case(camel_cased):
-        """ Transform to snake case
+        """Transform to snake case
 
         Transforms the keys of the given map from camelCase to snake_case.
         """
@@ -64,7 +65,7 @@ class VaultSecret:
 
 
 class SecretsVaultError(Exception):
-    """ An Exception that embeds the server response """
+    """An Exception that embeds the server response"""
 
     response: None
 
@@ -75,7 +76,109 @@ class SecretsVaultError(Exception):
 
 
 class SecretsVaultAccessError(SecretsVaultError):
-    """ An Exception that represents a 403 """
+    """An Exception that represents a 403"""
+
+
+class Authorizer(ABC):
+    """Main abstract base class for all Authorizer access methods."""
+
+    @staticmethod
+    def add_bearer_token_authorization_header(bearer_token, existing_headers={}):
+        """Adds an HTTP `Authorization` header containing the `Bearer` token
+        :param existing_headers: a ``dict`` containing the existing headers
+        :return: a ``dict`` containing the `existing_headers` and the
+                `Authorization` header
+        :rtype: ``dict``
+        """
+
+        return {
+            "Authorization": "Bearer " + bearer_token,
+            **existing_headers,
+        }
+
+    @abstractmethod
+    def get_access_token(self):
+        """Returns the access_token from a Grant Request"""
+
+    def headers(self, existing_headers={}):
+        """Returns a dictionary containing headers for REST API calls"""
+        return self.add_bearer_token_authorization_header(
+            self.get_access_token(), existing_headers
+        )
+
+
+class AccessTokenAuthorizer(Authorizer):
+    """Allows the use of a pre-existing access token to authorize REST API
+    calls.
+    """
+
+    def get_access_token(self):
+        return self.access_token
+
+    def __init__(self, access_token):
+        self.access_token = access_token
+
+
+class PasswordGrantAuthorizer(Authorizer):
+    """Allows the use of a username and password to be used to authorize REST
+    API calls.
+    """
+
+    @staticmethod
+    def _get_access_grant(token_url, client_id, client_secret):
+        """Gets an Access Grant by calling the DSV REST API ``token`` endpoint
+
+        :raise :class:`SecretsVaultError` when the server returns anything other
+               than a valid Access Grant"""
+
+        response = requests.post(
+            token_url,
+            json={
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "grant_type": "client_credentials",
+            },
+        )
+
+        try:
+            return json.loads(SecretsVault.process(response).content)
+        except json.JSONDecodeError:
+            raise SecretsVaultError(response)
+
+    def _refresh_access_grant(self, seconds_of_drift=300):
+        """Refreshes the Access Grant if it has expired or will in the next
+        `seconds_of_drift` seconds.
+
+        :raise :class:`SecretsVaultError` when the server returns anything other
+               than a valid Access Grant"""
+
+        if (
+            hasattr(self, "access_grant")
+            and self.access_grant_refreshed
+            + timedelta(seconds=self.access_grant["expiresIn"] + seconds_of_drift)
+            > datetime.now()
+        ):
+            return
+        else:
+            self.access_grant = self._get_access_grant(
+                self.token_url, self.client_id, self.client_secret
+            )
+            self.access_grant_refreshed = datetime.now()
+
+    def __init__(self, base_url, client_id, client_secret, token_path_uri="/v1/token"):
+        self.base_url = base_url
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.token_url = base_url.rstrip("/") + "/" + token_path_uri.lstrip("/")
+        self.grant_request = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "client_credentials",
+        }
+
+    def get_access_token(self):
+        self._refresh_access_grant()
+        return self.access_grant["accessToken"]
 
 
 class SecretsVault:
@@ -87,14 +190,11 @@ class SecretsVault:
     It uses :attr:`client_id` and :attr:`client_secret`
     to get an access_token with which to make calls to the DSV REST API"""
 
-    DEFAULT_TLD = "com"
-    DEFAULT_URL_TEMPLATE = "https://{}.secretsvaultcloud.{}/v1"
     SECRET_PATH_URI = "secrets"
-    TOKEN_PATH_URI = "token"
 
     @staticmethod
     def process(response):
-        """ Process the response raising an error if the call was unsuccessful
+        """Process the response raising an error if the call was unsuccessful
 
         :param response: the response from the server
         :type response: :class:`~requests.Response`
@@ -113,34 +213,11 @@ class SecretsVault:
             )
         raise SecretsVaultError(response)
 
-    @classmethod
-    def _get_access_grant(cls, token_url, client_id, client_secret):
-        """Gets an Access Grant by calling the DSV REST API ``token`` endpoint
-
-        :raise :class:`SecretsVaultError` when the server returns anything other
-               than a valid Access Grant"""
-
-        response = requests.post(
-            token_url,
-            json={
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "grant_type": "client_credentials",
-            },
-        )
-
-        try:
-            return json.loads(cls.process(response).content)
-        except json.JSONDecodeError:
-            raise SecretsVaultError(response)
-
     def __init__(
         self,
-        tenant,
-        client_id,
-        client_secret,
-        tld=DEFAULT_TLD,
-        url_template=DEFAULT_URL_TEMPLATE,
+        base_url,
+        authorizer: Authorizer,
+        api_path_uri="/v1",
     ):
         """
         :param tenant: The DSV tenant i.e. `tenant`.secretsvaultcloud.`tld`
@@ -154,43 +231,13 @@ class SecretsVault:
         :param url_template: The template to format with `tenant` and `tld`
         :type url_template: str"""
 
-        self.base_url = url_template.format(tenant, tld.strip("."))
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.token_url = f"{self.base_url}/{self.TOKEN_PATH_URI.lstrip('/')}"
-        self.secret_url = f"{self.base_url}/{self.SECRET_PATH_URI.lstrip('/')}"
+        self.base_url = base_url.rstrip("/")
+        self.authorizer = authorizer
+        self.api_url = base_url.rstrip("/") + "/" + api_path_uri.strip("/")
 
-    def _refresh_access_grant(self, seconds_of_drift=300):
-        """Refreshes the Access Grant if it has expired or will in the next
-        `seconds_of_drift` seconds.
-
-        :raise :class:`SecretsVaultError` when the server returns anything other
-               than a valid Access Grant"""
-
-        if (
-            hasattr(self, "access_grant")
-            and self.access_grant_refreshed
-            + timedelta(seconds=self.access_grant["expires_in"] + seconds_of_drift)
-            > datetime.now()
-        ):
-            return
-        else:
-            self.access_grant = self._get_access_grant(
-                self.token_url, self.client_id, self.client_secret
-            )
-            self.access_grant_refreshed = datetime.now()
-
-    def _add_authorization_header(self, existing_headers={}):
-        """Adds an HTTP `Authorization` header containing the `Bearer` token
-
-        :param existing_headers: a ``dict`` containing the existing headers
-        :return: a ``dict`` containing the `existing_headers` and the
-                `Authorization` header"""
-
-        return {
-            "Authorization": f"Bearer {self.access_grant['accessToken']}",
-            **existing_headers,
-        }
+    def headers(self):
+        """Returns a dictionary containing HTTP headers."""
+        return self.authorizer.headers()
 
     def get_secret_json(self, secret_path):
         """Gets a secret from DSV
@@ -204,12 +251,10 @@ class SecretsVault:
         :raise: :class:`SecretsVaultError` when the REST API call fails for
                 any other reason"""
 
-        self._refresh_access_grant()
-
         return self.process(
             requests.get(
-                f"{self.secret_url}/{secret_path}",
-                headers=self._add_authorization_header(),
+                f"{self.api_url}/{self.SECRET_PATH_URI}/{secret_path.lstrip('/')}",
+                headers=self.headers(),
             )
         ).text
 

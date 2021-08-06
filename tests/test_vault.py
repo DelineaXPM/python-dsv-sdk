@@ -24,7 +24,7 @@ def test_get_nonexistent_secret(vault):
 
 
 def test_get_secret_path_has_no_leading_slash(vault):
-    """Test that the secret path can bu built correctly with or without the 
+    """Test that the secret path can bu built correctly with or without the
     leading slash
     """
     assert len(VaultSecret(**vault.get_secret("test/sdk/simple")).id) == 36

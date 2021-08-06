@@ -20,7 +20,7 @@ def env_vars():
 def authorizer(env_vars):
     return PasswordGrantAuthorizer(
         env_vars["base_url"],
-        env_vars['client_id'],
+        env_vars["client_id"],
         env_vars["client_secret"],
     )
 

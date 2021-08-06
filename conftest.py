@@ -24,6 +24,7 @@ def authorizer(env_vars):
         env_vars["client_secret"],
     )
 
+
 @pytest.fixture()
 def vault(authorizer, env_vars):
     return SecretsVault(env_vars["base_url"], authorizer)

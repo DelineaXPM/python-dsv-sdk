@@ -86,7 +86,6 @@ pip install -r requirements.txt
 
 Valid credentials are required to run the unit tests. The credentials should be stored in environment variables or in a `.env` file:
 
-
 ```shell
 export DSV_CLIENT_ID="e7f6be68-0acb-4020-9c55-c7b161620199"
 export DSV_CLIENT_SECRET="0lYBbBbaXtkMd3WYydhfhuy0rHNFet_jq7QA4ZfEjxU"

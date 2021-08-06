@@ -1,22 +1,36 @@
-import json
+import os
 
-from thycotic.secrets.dataclasses import VaultSecret
 from thycotic.secrets.vault import (
+    PasswordGrantAuthorizer,
     SecretsVault,
     SecretsVaultAccessError,
     SecretsVaultError,
+    VaultSecret,
 )
 
-if __name__ == "__main__":
-    with open("test_vault.json") as f:
-        vault = SecretsVault(**json.load(f))
+
+BASE_URL = os.getenv("DSV_BASE_URL")
+CLIENT_ID = os.getenv("DSV_CLIENT_ID")
+CLIENT_SECRET = os.getenv("DSV_CLIENT_SECRET")
+
+
+def main():
+
     try:
-        secret = VaultSecret(**vault.get_secret("/test/secret"))
-        print(
-            f"""username: {secret.data['username']}
-password: {secret.data['password']}"""
-        )
+        authorizer = PasswordGrantAuthorizer(BASE_URL, CLIENT_ID, CLIENT_SECRET)
+        vault = SecretsVault(BASE_URL, authorizer)
+        secret = VaultSecret(**vault.get_secret("/test/sdk/simple"))
+
+        print(f"""
+        username: {secret.data['username']}
+        password: {secret.data['password']}
+        """)
+
     except SecretsVaultAccessError as e:
         print(e.message)
     except SecretsVaultError as e:
         print(e.response.text)
+
+
+if __name__ == "__main__":
+    main()

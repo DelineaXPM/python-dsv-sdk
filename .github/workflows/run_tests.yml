@@ -27,6 +27,6 @@ jobs:
         # Run tox using the version of Python in `PATH`
         run: tox -e py
         env:
-          client_id: ${{ secrets.DSV_CLIENT_ID }}
-          client_secret: ${{ secrets.DSV_CLIENT_SECRET }}
-          base_url: ${{ secrets.DSV_BASE_URL }}
+          DSV_CLIENT_ID: ${{ secrets.DSV_CLIENT_ID }}
+          DSV_CLIENT_SECRET: ${{ secrets.DSV_CLIENT_SECRET }}
+          DSV_BASE_URL: ${{ secrets.DSV_BASE_URL }}

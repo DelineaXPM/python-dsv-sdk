@@ -2,8 +2,8 @@
 using bearer token authentication.
 
 Example::
-
-    vault = SecretsVault(tenant, username, password, tld="com")
+    authorizer = PasswordGrantAuthorizer("https://mytenant.secretsvaultcloud.com/", "my_client_id", "my_client_secret")
+    vault = SecretsVault("https://mytenant.secretsvaultcloud.com/", authorizer)
     # to get the secret as a ``dict``
     secret = vault.get_secret("/path/to/secret")
     # or, to use the dataclass
@@ -184,11 +184,9 @@ class PasswordGrantAuthorizer(Authorizer):
 class SecretsVault:
     """A class that uses bearer token authentication to access the DSV API.
 
-    It Uses :attr:`tenant`, :attr:`tld` with :attr:`DEFAULT_URL_TEMPLATE`,
-    to create request URLs.
-
-    It uses :attr:`client_id` and :attr:`client_secret`
-    to get an access_token with which to make calls to the DSV REST API"""
+    It Uses :attr:`base_url`, :attr:`authorizer` to make calls to the DSV REST 
+    API
+    """
 
     SECRET_PATH_URI = "secrets"
 
@@ -220,16 +218,12 @@ class SecretsVault:
         api_path_uri="/v1",
     ):
         """
-        :param tenant: The DSV tenant i.e. `tenant`.secretsvaultcloud.`tld`
-        :type tenant: str
-        :param client_id: The DSV Client Credential
-        :type client_id: str
-        :param client_secret: The secret corresponding to `client_id`
-        :type client_secret: str
-        :param tld: The top-level domain e.g. "com" or "eu" (see `tenant`)
-        :type tld: str
-        :param url_template: The template to format with `tenant` and `tld`
-        :type url_template: str"""
+        :param base_url: The DSV URL i.e. mytenant.secretsvaultcloud.com
+        :type base_url: str
+        :param authorizer: The Authorizer class used to authenticate to the DSV 
+            REST API
+        :type authorizer: Authorizer class
+        """
 
         self.base_url = base_url.rstrip("/")
         self.authorizer = authorizer

@@ -71,8 +71,8 @@ First, ensure Python 3.6 is in `$PATH` then run:
 
 ```shell
 # Clone the repo
-git clone https://github.com/thycotic/python-tss-sdk
-cd python-tss-sdk
+git clone https://github.com/thycotic/python-dsv-sdk
+cd python-dsv-sdk
 
 # Create a virtual environment
 python -m venv venv
@@ -89,7 +89,7 @@ Valid credentials are required to run the unit tests. The credentials should be 
 ```shell
 export DSV_CLIENT_ID="e7f6be68-0acb-4020-9c55-c7b161620199"
 export DSV_CLIENT_SECRET="0lYBbBbaXtkMd3WYydhfhuy0rHNFet_jq7QA4ZfEjxU"
-export DSV_BASE_URL="https://tmg.secretsvaultcloud.com/"
+export DSV_BASE_URL="https://my.secretsvaultcloud.com/"
 ```
 
 The tests assume that the client associated with the specified `CLIENT_ID` can read the secret with the path `/test/sdk/simple`.

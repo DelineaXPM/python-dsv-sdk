@@ -9,7 +9,7 @@ from thycotic.secrets.vault import (
 
 def test_token_url(authorizer, env_vars):
     """Tests the token_url endpoint is built correctly"""
-    assert authorizer.token_url == f"{env_vars['base_url']}v1/token"
+    assert authorizer.token_url == f"{env_vars['base_url'].rstrip('/')}/v1/token"
 
 
 def test_get_secret(vault):

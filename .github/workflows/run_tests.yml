@@ -1,0 +1,32 @@
+name: Run Tests
+
+on: [pull_request]
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+    environment: testing
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install Tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+          
+      - name: Run Tox
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py
+        env:
+          DSV_CLIENT_ID: ${{ secrets.DSV_CLIENT_ID }}
+          DSV_CLIENT_SECRET: ${{ secrets.DSV_CLIENT_SECRET }}
+          DSV_BASE_URL: ${{ secrets.DSV_BASE_URL }}

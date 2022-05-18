@@ -1,4 +1,4 @@
-""" The Thycotic DevOps Secrets Vault (DSV) SDK API facilitates access to DSV
+""" The Delinea DevOps Secrets Vault (DSV) SDK API facilitates access to DSV
 using bearer token authentication.
 
 Example::

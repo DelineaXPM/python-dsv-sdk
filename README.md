@@ -1,11 +1,11 @@
-# The Thycotic DevOps Secrets Vault Python SDK
+# The Delinea DevOps Secrets Vault Python SDK
 
 ![PyPI Version](https://img.shields.io/pypi/v/python-dsv-sdk)
 ![License](https://img.shields.io/github/license/thycotic/python-dsv-sdk)
 ![Python Versions](https://img.shields.io/pypi/pyversions/python-dsv-sdk)
 
-The [Thycotic](https://thycotic.com/)
-[DevOps Secrets Vault](https://thycotic.com/products/devops-secrets-vault-password-management/)
+The [Delinea](https://delinea.com/)
+[DevOps Secrets Vault](https://delinea.com/products/devops-secrets-management-vault)
 (DSV) Python SDK contains classes that interact with the DSV REST API.
 
 ## Install

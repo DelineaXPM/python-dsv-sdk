@@ -1,6 +1,6 @@
 import os
 
-from thycotic.secrets.vault import (
+from delinea.secrets.vault import (
     PasswordGrantAuthorizer,
     SecretsVault,
     SecretsVaultAccessError,

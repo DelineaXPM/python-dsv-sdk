@@ -1,5 +1,5 @@
 import pytest
-from thycotic.secrets.vault import (
+from delinea.secrets.vault import (
     AccessTokenAuthorizer,
     SecretsVault,
     SecretsVaultAccessError,

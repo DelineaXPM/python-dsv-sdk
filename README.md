@@ -1,7 +1,7 @@
 # The Delinea DevOps Secrets Vault Python SDK
 
 ![PyPI Version](https://img.shields.io/pypi/v/python-dsv-sdk)
-![License](https://img.shields.io/github/license/thycotic/python-dsv-sdk)
+![License](https://img.shields.io/github/license/DelineaXPM/python-dsv-sdk)
 ![Python Versions](https://img.shields.io/pypi/pyversions/python-dsv-sdk)
 
 The [Delinea](https://delinea.com/)
@@ -28,7 +28,7 @@ There are two ways in which you can authorize the `SecretsVault` class to fetch 
 If using a traditional `client_id` and a `client_secret` to authenticate in to your DevOps Secrets Vault, you can pass the `PasswordGrantAuthorizer` into the `SecretsVault` class at instantiation. The `PasswordGrantAuthorizer` requires a `base_url`, `username`, and `password`. It _optionally_ takes a `token_path_uri`, but defaults to `/v1/token`.
 
 ```python
-from thycotic.secrets.vault import PasswordGrantAuthorizer
+from delinea.secrets.vault import PasswordGrantAuthorizer
 
 authorizer = PasswordGrantAuthorizer("https://mytenant.secretsvaultcloud.com/", "my_client_id", "my_client_secret")
 ```
@@ -38,7 +38,7 @@ authorizer = PasswordGrantAuthorizer("https://mytenant.secretsvaultcloud.com/", 
 If you already have a valid `access_token`, you can pass directly via the `AccessTokenAuthorizer`.
 
 ```python
-from thycotic.secrets.vault import AccessTokenAuthorizer
+from delinea.secrets.vault import AccessTokenAuthorizer
 
 authorizer = AccessTokenAuthorizer("YgJ1slfZs8ng9bKsRsB-tic0Kh8I...")
 ```
@@ -48,7 +48,7 @@ authorizer = AccessTokenAuthorizer("YgJ1slfZs8ng9bKsRsB-tic0Kh8I...")
 Instantiate `SecretsVault` by passing your `base_url` and `Authorizer` as arguments:
 
 ```python
-from thycotic.secrets.vault import SecretsVault
+from delinea.secrets.vault import SecretsVault
 
 vault = SecretsVault("https://mytenant.secretsvaultcloud.com/", authorizer)
 ```
@@ -56,7 +56,7 @@ vault = SecretsVault("https://mytenant.secretsvaultcloud.com/", authorizer)
 Secrets can be fetched using the `get_secret` method, which takes the `secret_path` of the secret and returns a `json` object. Alternatively, you can use pass the json to `VaultSecret` which returns a `dataclass` object representation of the secret:
 
 ```python
-from thycotic.secrets.vault import VaultSecret
+from delinea.secrets.vault import VaultSecret
 
 secret = VaultSecret(**vault.get_secret("/test/secret"))
 
@@ -75,7 +75,7 @@ First, ensure Python 3.6 is in `$PATH` then run:
 
 ```shell
 # Clone the repo
-git clone https://github.com/thycotic/python-dsv-sdk
+git clone https://github.com/DelineaXPM/python-dsv-sdk
 cd python-dsv-sdk
 
 # Create a virtual environment

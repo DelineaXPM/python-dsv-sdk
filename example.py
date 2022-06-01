@@ -21,10 +21,12 @@ def main():
         vault = SecretsVault(BASE_URL, authorizer)
         secret = VaultSecret(**vault.get_secret("/test/sdk/simple"))
 
-        print(f"""
+        print(
+            f"""
         username: {secret.data['username']}
         password: {secret.data['password']}
-        """)
+        """
+        )
 
     except SecretsVaultAccessError as e:
         print(e.message)

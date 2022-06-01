@@ -1,5 +1,7 @@
 # The Delinea DevOps Secrets Vault Python SDK
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ![PyPI Version](https://img.shields.io/pypi/v/python-dsv-sdk)
 ![License](https://img.shields.io/github/license/DelineaXPM/python-dsv-sdk)
 ![Python Versions](https://img.shields.io/pypi/pyversions/python-dsv-sdk)

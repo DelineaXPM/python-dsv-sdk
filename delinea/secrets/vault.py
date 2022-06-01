@@ -184,7 +184,7 @@ class PasswordGrantAuthorizer(Authorizer):
 class SecretsVault:
     """A class that uses bearer token authentication to access the DSV API.
 
-    It Uses :attr:`base_url`, :attr:`authorizer` to make calls to the DSV REST 
+    It Uses :attr:`base_url`, :attr:`authorizer` to make calls to the DSV REST
     API
     """
 
@@ -220,7 +220,7 @@ class SecretsVault:
         """
         :param base_url: The DSV URL i.e. mytenant.secretsvaultcloud.com
         :type base_url: str
-        :param authorizer: The Authorizer class used to authenticate to the DSV 
+        :param authorizer: The Authorizer class used to authenticate to the DSV
             REST API
         :type authorizer: Authorizer class
         """

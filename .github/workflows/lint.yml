@@ -1,27 +1,23 @@
-name: Lint
-
+---
+name: lint
 on:
-  workflow_dispatch:
+  # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
   push:
     branches:
       - main
+      - stable-*
   pull_request:
-    branches:
-      - main
+  # Run CI once per day (at 06:00 UTC)
+  # This ensures that even if there haven't been commits that we are still testing against latest version of ansible-test for each ansible-base version
+  # schedule:
+  #   - cron: '0 6 * * *'
+  workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  checks: write
+  contents: read
 jobs:
   lint:
-    name: Run black linter
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-      - name: Install Python dependencies
-        run: pip install black
-      - name: Run black
-        uses: wearerequired/lint-action@v2
-        with:
-           black: true
-           auto_fix: true
+    uses: delineaxpm/github-workflows/.github/workflows/lint.yml@main
+    secrets: inherit

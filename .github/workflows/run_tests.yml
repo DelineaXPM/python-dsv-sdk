@@ -3,7 +3,6 @@ name: Run Tests
 on: [pull_request]
 
 jobs:
-  
   build:
     runs-on: ubuntu-latest
     environment: testing
@@ -22,7 +21,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox
-          
+
       - name: Run Tox
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -30,3 +29,6 @@ jobs:
           DSV_CLIENT_ID: ${{ secrets.DSV_CLIENT_ID }}
           DSV_CLIENT_SECRET: ${{ secrets.DSV_CLIENT_SECRET }}
           DSV_BASE_URL: ${{ secrets.DSV_BASE_URL }}
+      - uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: false

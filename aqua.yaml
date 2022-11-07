@@ -12,7 +12,7 @@ packages:
   - name: charmbracelet/glow@v1.4.1
   - name: goreleaser/goreleaser@v1.12.3
   - name: mvdan/gofumpt@v0.4.0
-  - name: golang.org/x/tools/gopls@v0.9.5
+  - name: golang.org/x/tools/gopls@v0.10.1
   - name: golang/tools/gorename@v0.2.0
   - name: golang/tools/stringer@v0.2.0
   - name: golang/tools/gomvpkg@v0.2.0

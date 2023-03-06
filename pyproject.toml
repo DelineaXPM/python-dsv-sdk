@@ -6,19 +6,15 @@ build-backend = "flit_core.buildapi"
 module = "delinea"
 author = "Adam Migus"
 author-email = "adam@migus.org"
-classifiers = [ 
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
 ]
 description-file = "README.md"
-requires = [
-    "dataclasses",
-    "requests >= 2.22.0"
-]
-requires-python=">=3.6"
+requires = ["requests >= 2.22.0"]
+requires-python = ">=3.7"
 dist-name = "python-dsv-sdk"

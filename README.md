@@ -71,9 +71,10 @@ When using a self-signed certificate for SSL, the `REQUESTS_CA_BUNDLE` environme
 
 ## Create a Build Environment (optional)
 
-The SDK requires [Python 3.6](https://www.python.org/downloads/) or higher.
+The SDK requires [Python 3.7](https://www.python.org/downloads/) or higher.
 
-First, ensure Python 3.6 is in `$PATH` then run:
+Assuming that you have a supported version of Python installed, you can clone
+this repository and set up your environment with:
 
 ```shell
 # Clone the repo
@@ -87,7 +88,6 @@ python -m venv venv
 # Install dependencies
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-
 ```
 
 Valid credentials are required to run the unit tests. The credentials should be stored in environment variables or in a `.env` file:

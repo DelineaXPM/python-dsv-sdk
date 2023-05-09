@@ -51,3 +51,8 @@ newlines:
   beforeKind: 0
   beforeVersion: 0
   endOfVersion: 0
+
+replacements:
+  - path: "pyproject.toml"
+    find: 'version = ".*"'
+    replace: 'version = "{{.VersionNoPrefix}}"'

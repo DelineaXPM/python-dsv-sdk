@@ -11,8 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - id: dsv
+        uses: DelineaXPM/dsv-github-action@v2.0.2
+        with:
+          domain: ${{ secrets.DSV_SERVER }}
+          clientId: ${{ secrets.DSV_CLIENT_ID }}
+          clientSecret: ${{ secrets.DSV_CLIENT_SECRET }}
+          retrieve: |
+            [
+             {"secretPath": "ci:publish:pypi", "secretKey": "PYPI_API_TOKEN", "outputVariable": "PYPI_API_TOKEN"}
+            ]
       - uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -30,4 +39,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: "${{ env.PYPI_API_TOKEN }}" # ${{ secrets.PYPI_API_TOKEN }}

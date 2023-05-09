@@ -53,6 +53,11 @@ newlines:
   endOfVersion: 0
 
 replacements:
-  - path: "pyproject.toml"
-    find: 'version = ".*"'
-    replace: 'version = "{{.VersionNoPrefix}}"'
+  - path: "delinea/__init__.py"
+    find: '__version__ = ".*"'
+    replace: '__version__ = "{{.VersionNoPrefix}}"'
+
+  # Not supported yet by older version of flit. Instead set in __init__.py
+  # - path: "pyproject.toml"
+  #   find: 'version = ".*"'
+  #   replace: 'version = "{{.VersionNoPrefix}}"'

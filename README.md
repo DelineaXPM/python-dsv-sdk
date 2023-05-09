@@ -1,11 +1,8 @@
 # The Delinea DevOps Secrets Vault Python SDK
 
 ![PyPI](https://img.shields.io/pypi/v/python-dsv-sdk?style=for-the-badge)
-
 ![License](https://img.shields.io/github/license/DelineaXPM/python-dsv-sdk?style=for-the-badge)
-
 ![Python Versions](https://img.shields.io/pypi/pyversions/python-dsv-sdk?style=for-the-badge)
-
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/python-dsv-sdk?style=for-the-badge)
 
 The [Delinea](https://delinea.com/)
@@ -15,7 +12,7 @@ The [Delinea](https://delinea.com/)
 
 ## PYPI
 
-[Pypi](https://pypi.org/project/python-dsv-sdk/)
+[🔗 Pypi](https://pypi.org/project/python-dsv-sdk/)
 
 ## Install
 

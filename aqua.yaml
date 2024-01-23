@@ -3,7 +3,7 @@
 # https://aquaproj.github.io/
 registries:
   - type: standard
-    ref: v3.140.0 # renovate: depName=aquaproj/aqua-registry
+    ref: v4.122.1 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: miniscruff/changie@v1.12.0
   - name: golang/go@go1.20.1

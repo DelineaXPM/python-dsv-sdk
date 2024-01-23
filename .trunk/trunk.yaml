@@ -1,24 +1,24 @@
 version: 0.1
 cli:
-  version: 1.0.1
+  version: 1.19.0
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.5
+      ref: v1.2.1
       uri: https://github.com/trunk-io/plugins
 lint:
   enabled:
-    - hadolint@2.10.0
+    - hadolint@2.12.0
     - yamllint@1.28.0
-    - gitleaks@8.15.0
+    - gitleaks@8.18.1
     - black@22.10.0
-    - taplo@release-taplo-cli-0.7.0
-    - actionlint@1.6.21
+    - taplo@0.8.1
+    - actionlint@1.6.26
     - isort@5.10.1
     - flake8@5.0.4
     - git-diff-check
-    - prettier@2.7.1
-    - markdownlint@0.32.2
+    - prettier@3.2.4
+    - markdownlint@0.38.0
   threshold:
     - linters: [markdownlint]
       level: high

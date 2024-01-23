@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - id: dsv
-        uses: DelineaXPM/dsv-github-action@v2.0.2
+        uses: DelineaXPM/dsv-github-action@2559ec0943aaf9a42b634cfbfef1b689041c4270 # v2.0.3
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
@@ -21,9 +21,9 @@ jobs:
             [
              {"secretPath": "ci:publish:pypi", "secretKey": "PYPI_API_TOKEN", "outputVariable": "PYPI_API_TOKEN"}
             ]
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4
         with:
           python-version: "3.x"
 

@@ -1,3 +1,3 @@
-"""The Delinea DevOps Secret Vault Python SDK"""
+"""The Delinea DevOps Secrets Vault Python SDK"""
 
 __version__ = "1.0.4"

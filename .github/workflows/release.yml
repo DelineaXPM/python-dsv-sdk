@@ -2,8 +2,8 @@ name: release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+    paths: [CHANGELOG.md] # your changelog file if different
   workflow_dispatch:
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - id: dsv
-        uses: DelineaXPM/dsv-github-action@v2.0.2
+        uses: DelineaXPM/dsv-github-action@2559ec0943aaf9a42b634cfbfef1b689041c4270 # v2.0.3
         with:
           domain: ${{ secrets.DSV_SERVER }}
           clientId: ${{ secrets.DSV_CLIENT_ID }}
@@ -21,13 +21,22 @@ jobs:
             [
              {"secretPath": "ci:publish:pypi", "secretKey": "PYPI_API_TOKEN", "outputVariable": "PYPI_API_TOKEN"}
             ]
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: aquaproj/aqua-installer@36dc5833b04eb63f06e3bb818aa6b7a6e6db99a9 # v2.1.2
+        continue-on-error: true
+        with:
+          aqua_version: v2.10.1
+          enable_aqua_install: true
+          aqua_opts: "--tags release" # if using aqua.yaml config any special items in your repo like Golangci-lint using tags so it only installs what's needed
+        env:
+          AQUA_LOG_LEVEL: debug
+          AQUA_OPTS: ""
+      - name: setup-python
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
         with:
           python-version: "3.x"
 
-      - name: Install dependencies
+      - name: python-install-deps
         run: |
           python -m pip install --upgrade pip
           python -m pip install flit
@@ -35,8 +44,20 @@ jobs:
       - name: Build package
         run: flit build
 
-      - name: Publish package
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: publish-pypi
+        uses: pypa/gh-action-pypi-publish@2f6f737ca5f74c637829c0f5c3acd0e29ea5e8bf #v1.8.11
         with:
           user: __token__
           password: "${{ env.PYPI_API_TOKEN }}" # ${{ secrets.PYPI_API_TOKEN }}
+      - name: create-github-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+              datestring=$(date "+%Y-%m-%d")
+          elif [[ "$OSTYPE" == "darwin"* ]]; then
+              datestring=$(date -u "+%Y-%m-%d")
+          fi
+          cmd="gh release create \"$(changie latest)\" --title \"$(changie latest) - ${datestring}\" -F \".changes/$(changie latest).md\""
+          printf "Command to execute: $cmd\n"
+          eval "$cmd"

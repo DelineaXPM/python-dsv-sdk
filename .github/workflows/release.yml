@@ -21,7 +21,7 @@ jobs:
             [
              {"secretPath": "ci:publish:pypi", "secretKey": "PYPI_API_TOKEN", "outputVariable": "PYPI_API_TOKEN"}
             ]
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
       - uses: aquaproj/aqua-installer@36dc5833b04eb63f06e3bb818aa6b7a6e6db99a9 # v2.1.2
         continue-on-error: true
         with:

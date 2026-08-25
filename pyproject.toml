@@ -1,12 +1,16 @@
 [build-system]
-requires = ["flit_core ==3.9.0"]
+requires = ["flit_core >=3.12,<5"]
 build-backend = "flit_core.buildapi"
 
-[tool.flit.metadata]
-module = "delinea"
-author = "Delinea"
+[project]
+name = "python-dsv-sdk"
+authors = [{name = "Delinea"}]
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.7"
+dynamic = ["version", "description"]
+dependencies = ["requests >= 2.22.0"]
 classifiers = [
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
@@ -14,7 +18,9 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
 ]
-description-file = "README.md"
-requires = ["requests >= 2.22.0"]
-requires-python = ">=3.7"
-dist-name = "python-dsv-sdk"
+
+[project.urls]
+Homepage = "https://github.com/DelineaXPM/python-dsv-sdk"
+
+[tool.flit.module]
+name = "delinea"

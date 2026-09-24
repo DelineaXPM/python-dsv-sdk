@@ -1,4 +1,5 @@
 kind: "\U0001F512 Security"
-body: Pin urllib3>=2.7.0 in requirements.txt (transitive via requests) for Snyk-reported
+body:
+  Pin urllib3>=2.7.0 in requirements.txt (transitive via requests) for Snyk-reported
   urllib3 vulnerabilities. urllib3 2.7+ requires Python 3.10+.
 time: 2026-09-24T11:41:25.020982-07:00

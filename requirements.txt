@@ -4,3 +4,4 @@ pytest
 python-dotenv
 flit
 zipp==3.19.2 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.7.0 # not directly required (via requests); pinned for Snyk urllib3 findings. urllib3 >= 2.7 needs Python >= 3.10

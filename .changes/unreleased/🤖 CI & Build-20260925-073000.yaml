@@ -1,0 +1,3 @@
+kind: 🤖 CI & Build
+body: Repair the test workflow. It had failed on every run because its DSV credentials were dead; it now runs against a dev tenant with a dedicated read-only CI client. Dropped Python 3.7 from the CI matrix (not available on ubuntu-24.04) and disabled fail-fast so each version reports its own result.
+time: 2026-09-25T07:30:00.000000-07:00

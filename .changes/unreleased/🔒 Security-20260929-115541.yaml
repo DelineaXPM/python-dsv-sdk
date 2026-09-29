@@ -1,0 +1,3 @@
+kind: 🔒 Security
+body: Tell Snyk to scan requirements.txt with Python 3.11 (.snyk). Its default of Python 3.7 could not install the pinned versions and reported stale ones (urllib3 2.0.7, requests 2.31.0), so fixed findings kept showing as open.
+time: 2026-09-29T11:55:41.000000-07:00
